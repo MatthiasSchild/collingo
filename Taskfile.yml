@@ -1,0 +1,25 @@
+version: "3"
+tasks:
+  build:windows:amd64:
+    env:
+      CGO_ENABLED: 0
+      GOOS: windows
+      GOARCH: amd64
+    cmds:
+      - go build -o .out/collingo_windows_amd64.exe
+
+  build:macos:amd64:
+    env:
+      CGO_ENABLED: 0
+      GOOS: darwin
+      GOARCH: amd64
+    cmds:
+      - go build -o .out/collingo_macos_amd64
+
+  build:macos:arm64:
+    env:
+      CGO_ENABLED: 0
+      GOOS: darwin
+      GOARCH: arm64
+    cmds:
+      - go build -o .out/collingo_macos_arm64

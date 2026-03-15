@@ -25,7 +25,7 @@ var GroupsListCmd = &cobra.Command{
 		}
 
 		// Get current project
-		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workingDir := partials.WorkingDirFromFlags(cmd)
 		workspaceConfig, err := config.LoadWorkspaceConfigFromFile(workingDir)
 		if err != nil {
 			return err
@@ -55,5 +55,4 @@ var GroupsListCmd = &cobra.Command{
 
 func init() {
 	GroupsCmd.AddCommand(GroupsListCmd)
-	GroupsListCmd.Flags().String("working-dir", "", "Set the working directory")
 }

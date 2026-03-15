@@ -28,7 +28,7 @@ var EntriesDeleteCmd = &cobra.Command{
 		}
 
 		// Get current project
-		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workingDir := partials.WorkingDirFromFlags(cmd)
 		workspaceConfig, err := config.LoadWorkspaceConfigFromFile(workingDir)
 		if err != nil {
 			return err
@@ -113,7 +113,6 @@ var EntriesDeleteCmd = &cobra.Command{
 
 func init() {
 	EntriesCmd.AddCommand(EntriesDeleteCmd)
-	EntriesDeleteCmd.Flags().String("working-dir", "", "Set the working directory")
 	EntriesDeleteCmd.Flags().String("group", "", "The id of the group")
 	EntriesDeleteCmd.Flags().String("technical-name", "", "The technical name of the entry")
 	EntriesDeleteCmd.Flags().Bool("yes", false, "Confirm and don't ask")

@@ -13,4 +13,5 @@ func init() {
 		&cobra.Group{ID: "setup", Title: "Setup commands"},
 		&cobra.Group{ID: "management", Title: "Management commands"},
 	)
+	RootCmd.PersistentFlags().String("working-dir", "", "Set the working directory")
 }

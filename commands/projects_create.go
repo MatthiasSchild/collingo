@@ -24,7 +24,7 @@ var ProjectsCreateCmd = &cobra.Command{
 			return err
 		}
 
-		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workingDir := partials.WorkingDirFromFlags(cmd)
 		workspaceConfig, _ := config.LoadWorkspaceConfigFromFile(workingDir)
 		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
 

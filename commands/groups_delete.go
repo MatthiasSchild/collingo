@@ -25,7 +25,7 @@ var GroupsDeleteCmd = &cobra.Command{
 		}
 
 		// Get current project
-		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workingDir := partials.WorkingDirFromFlags(cmd)
 		workspaceConfig, err := config.LoadWorkspaceConfigFromFile(workingDir)
 		if err != nil {
 			return err
@@ -80,7 +80,6 @@ var GroupsDeleteCmd = &cobra.Command{
 
 func init() {
 	GroupsCmd.AddCommand(GroupsDeleteCmd)
-	GroupsDeleteCmd.Flags().String("working-dir", "", "Set the working directory")
 	GroupsDeleteCmd.Flags().String("group", "", "The path of the group (e.g. main.footer)")
 	GroupsDeleteCmd.Flags().String("group-id", "", "The id of the group")
 	GroupsDeleteCmd.Flags().Bool("yes", false, "Confirm and don't ask")

@@ -24,7 +24,7 @@ var EntriesCreateCmd = &cobra.Command{
 		}
 
 		// Get current project
-		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workingDir := partials.WorkingDirFromFlags(cmd)
 		workspaceConfig, err := config.LoadWorkspaceConfigFromFile(workingDir)
 		if err != nil {
 			return err
@@ -87,7 +87,6 @@ var EntriesCreateCmd = &cobra.Command{
 
 func init() {
 	EntriesCmd.AddCommand(EntriesCreateCmd)
-	EntriesCreateCmd.Flags().String("working-dir", "", "Set the working directory")
 	EntriesCreateCmd.Flags().String("group", "", "group path (e.g. \"base.footer\")")
 	EntriesCreateCmd.Flags().String("group-id", "", "The group where the entry should be added")
 	EntriesCreateCmd.Flags().String("technical-name", "", "The technical name for this entry")

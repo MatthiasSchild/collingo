@@ -27,7 +27,7 @@ var GroupsUpdateCmd = &cobra.Command{
 		}
 
 		// Get current project
-		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workingDir := partials.WorkingDirFromFlags(cmd)
 		workspaceConfig, err := config.LoadWorkspaceConfigFromFile(workingDir)
 		if err != nil {
 			return err
@@ -162,5 +162,4 @@ func init() {
 	GroupsUpdateCmd.Flags().Bool("root-group", false, "Put the group as root without a parent")
 	GroupsUpdateCmd.Flags().String("display-name", "", "The new display name")
 	GroupsUpdateCmd.Flags().String("technical-name", "", "The new technical name")
-	GroupsUpdateCmd.Flags().String("working-dir", "", "Set the working directory")
 }

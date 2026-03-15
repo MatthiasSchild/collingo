@@ -23,7 +23,7 @@ var ExportJsonCommand = &cobra.Command{
 		}
 
 		// Get current project
-		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workingDir := partials.WorkingDirFromFlags(cmd)
 		workspaceConfig, err := config.LoadWorkspaceConfigFromFile(workingDir)
 		if err != nil {
 			return err
@@ -42,5 +42,4 @@ var ExportJsonCommand = &cobra.Command{
 
 func init() {
 	ExportCommand.AddCommand(ExportJsonCommand)
-	ExportJsonCommand.Flags().String("working-dir", "", "Set the working directory")
 }

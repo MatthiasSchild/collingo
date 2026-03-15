@@ -29,7 +29,7 @@ var EntriesUpdateCmd = &cobra.Command{
 		}
 
 		// Get current project
-		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workingDir := partials.WorkingDirFromFlags(cmd)
 		workspaceConfig, err := config.LoadWorkspaceConfigFromFile(workingDir)
 		if err != nil {
 			return err
@@ -286,5 +286,4 @@ func init() {
 	EntriesUpdateCmd.Flags().String("base-term", "", "Set the new base term")
 	EntriesUpdateCmd.Flags().String("context", "", "Set the new context info")
 	EntriesUpdateCmd.Flags().Bool("no-context", false, "Remove the context info")
-	EntriesUpdateCmd.Flags().String("working-dir", "", "Set the working directory")
 }

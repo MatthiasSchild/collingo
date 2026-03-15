@@ -24,7 +24,7 @@ var GroupsCreateCmd = &cobra.Command{
 		}
 
 		// Get current project
-		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workingDir := partials.WorkingDirFromFlags(cmd)
 		workspaceConfig, err := config.LoadWorkspaceConfigFromFile(workingDir)
 		if err != nil {
 			return err
@@ -83,5 +83,4 @@ func init() {
 	GroupsCreateCmd.Flags().String("parent-id", "", "The ID of the parent group")
 	GroupsCreateCmd.Flags().String("display-name", "", "A human readable name for the group")
 	GroupsCreateCmd.Flags().String("technical-name", "", "A technical identifier for this group")
-	GroupsCreateCmd.Flags().String("working-dir", "", "Set the working directory")
 }

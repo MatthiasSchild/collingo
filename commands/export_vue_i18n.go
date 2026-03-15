@@ -22,7 +22,7 @@ var ExportVueI18nCommand = &cobra.Command{
 			return err
 		}
 
-		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workingDir := partials.WorkingDirFromFlags(cmd)
 		workspaceConfig, err := config.LoadWorkspaceConfigFromFile(workingDir)
 		if err != nil {
 			return err
@@ -41,5 +41,4 @@ var ExportVueI18nCommand = &cobra.Command{
 
 func init() {
 	ExportCommand.AddCommand(ExportVueI18nCommand)
-	ExportVueI18nCommand.Flags().String("working-dir", "", "Set the working directory")
 }

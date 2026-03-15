@@ -23,7 +23,7 @@ var EntriesListCmd = &cobra.Command{
 		}
 
 		// Get current project
-		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workingDir := partials.WorkingDirFromFlags(cmd)
 		workspaceConfig, err := config.LoadWorkspaceConfigFromFile(workingDir)
 		if err != nil {
 			return err
@@ -71,5 +71,4 @@ func init() {
 	EntriesCmd.AddCommand(EntriesListCmd)
 	EntriesListCmd.Flags().String("group", "", "The path of the group")
 	EntriesListCmd.Flags().String("group-id", "", "The id of the group")
-	EntriesListCmd.Flags().String("working-dir", "", "Set the working directory")
 }

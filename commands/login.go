@@ -31,7 +31,7 @@ var LoginCmd = &cobra.Command{
 			`^[a-z0-9_]{1,32}$`,
 		)
 
-		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workingDir := partials.WorkingDirFromFlags(cmd)
 		workspaceConfig, _ := config.LoadWorkspaceConfigFromFile(workingDir)
 		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
 

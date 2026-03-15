@@ -7,8 +7,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func WorkingDirFromFlags(cmd *cobra.Command, flagName string) string {
-	workingDir, err := cmd.Flags().GetString("working-dir")
+const WorkingDirFlagName = "working-dir"
+
+func WorkingDirFromFlags(cmd *cobra.Command) string {
+	workingDir, err := cmd.Flags().GetString(WorkingDirFlagName)
 	if err != nil {
 		slog.Warn("Could not parse working dir flag", "err", err.Error())
 	} else if workingDir != "" {

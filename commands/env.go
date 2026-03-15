@@ -21,7 +21,7 @@ var EnvCmd = &cobra.Command{
 			return err
 		}
 
-		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workingDir := partials.WorkingDirFromFlags(cmd)
 		workspaceConfig, workspaceConfigPath, err := config.LoadWorkspaceConfigFromFileWithPath(workingDir)
 		if err != nil {
 			// Not in a workspace
@@ -60,5 +60,4 @@ var EnvCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(EnvCmd)
-	EnvCmd.Flags().String("working-dir", "", "Set the working directory")
 }

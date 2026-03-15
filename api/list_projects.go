@@ -7,10 +7,10 @@ import (
 	"net/http"
 )
 
-func ListProjects(userConfig *config.UserConfig, limit uint32, offset uint32) (models.ManyResultModel[models.ProjectModel], error) {
+func ListProjects(userConfig *config.UserConfig, baseUrl string, limit uint32, offset uint32) (models.ManyResultModel[models.ProjectModel], error) {
 	var result models.ManyResultModel[models.ProjectModel]
 
-	req, err := prepareGetRequestWithPagination(userConfig, "/api/v1/projects", limit, offset)
+	req, err := prepareGetRequestWithPagination(userConfig, baseUrl, "/api/v1/projects", limit, offset)
 	if err != nil {
 		return result, err
 	}

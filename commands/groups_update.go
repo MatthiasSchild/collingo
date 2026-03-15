@@ -33,11 +33,13 @@ var GroupsUpdateCmd = &cobra.Command{
 			return err
 		}
 		projectId := workspaceConfig.ProjectId
+		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
 
 		// Get the group
 		group, err := partials.GetGroupFromCommand(
 			userConfig,
 			workspaceConfig,
+			baseUrl,
 			cmd,
 		)
 		if err != nil {
@@ -64,7 +66,7 @@ var GroupsUpdateCmd = &cobra.Command{
 				return err
 			}
 			if selectParent {
-				newParent, err := dialogs.GroupSelection(userConfig, projectId, group.ID)
+				newParent, err := dialogs.GroupSelection(userConfig, baseUrl, projectId, group.ID)
 				if err != nil {
 					return err
 				}
@@ -142,7 +144,7 @@ var GroupsUpdateCmd = &cobra.Command{
 			console.Info("Nothing to update")
 			return nil
 		}
-		groupResult, err := api.UpdateGroup(userConfig, projectId, group.ID, input)
+		groupResult, err := api.UpdateGroup(userConfig, baseUrl, projectId, group.ID, input)
 		if err != nil {
 			return err
 		}

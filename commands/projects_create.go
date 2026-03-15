@@ -5,6 +5,7 @@ import (
 	"collingo/config"
 	"collingo/console"
 	"collingo/dialogs"
+	"collingo/partials"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -22,6 +23,10 @@ var ProjectsCreateCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
+
+		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workspaceConfig, _ := config.LoadWorkspaceConfigFromFile(workingDir)
+		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
 
 		// Get name for project
 		name, err := cmd.Flags().GetString("name")
@@ -46,7 +51,7 @@ var ProjectsCreateCmd = &cobra.Command{
 		}
 
 		// Create the project
-		project, err := api.CreateProject(userConfig, api.CreateProjectInput{
+		project, err := api.CreateProject(userConfig, baseUrl, api.CreateProjectInput{
 			Name:                 name,
 			BaseLanguage:         baseLanguage,
 			TranslationLanguages: translationLanguages,

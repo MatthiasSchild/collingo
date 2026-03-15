@@ -10,8 +10,8 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func EntrySelection(userConfig *config.UserConfig, projectId string, groupId string) (models.EntryModel, error) {
-	group, err := api.GetGroup(userConfig, projectId, groupId)
+func EntrySelection(userConfig *config.UserConfig, baseUrl string, projectId string, groupId string) (models.EntryModel, error) {
+	group, err := api.GetGroup(userConfig, baseUrl, projectId, groupId)
 	if err != nil {
 		return models.EntryModel{}, err
 	}

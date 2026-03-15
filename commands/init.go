@@ -52,8 +52,10 @@ func initCmdNew() error {
 		return err
 	}
 
+	baseUrl := config.EffectiveServerUrl(userConfig, nil)
+
 	// Select project
-	project, err := dialogs.ProjectSelection(userConfig)
+	project, err := dialogs.ProjectSelection(userConfig, baseUrl)
 	if err != nil {
 		return err
 	}
@@ -93,13 +95,15 @@ func initCmdUpdate() error {
 		return err
 	}
 
+	baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
+
 	// Select project
 	updateProject, err := dialogs.Confirm("Do you want to update the project?")
 	if err != nil {
 		return err
 	}
 	if updateProject {
-		project, err := dialogs.ProjectSelection(userConfig)
+		project, err := dialogs.ProjectSelection(userConfig, baseUrl)
 		if err != nil {
 			return err
 		}

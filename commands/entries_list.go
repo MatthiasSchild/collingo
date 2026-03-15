@@ -29,10 +29,13 @@ var EntriesListCmd = &cobra.Command{
 			return err
 		}
 
+		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
+
 		// Get the group
 		group, err := partials.GetGroupFromCommand(
 			userConfig,
 			workspaceConfig,
+			baseUrl,
 			cmd,
 		)
 		if err != nil {

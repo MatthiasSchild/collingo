@@ -8,9 +8,9 @@ import (
 	"net/http"
 )
 
-func GetGroup(userConfig *config.UserConfig, project string, group string) (models.GroupModel, error) {
-	url := fmt.Sprintf("/api/v1/projects/%s/groups/%s", project, group)
-	req, err := prepareGetRequest(userConfig, url)
+func GetGroup(userConfig *config.UserConfig, baseUrl string, project string, group string) (models.GroupModel, error) {
+	path := fmt.Sprintf("/api/v1/projects/%s/groups/%s", project, group)
+	req, err := prepareGetRequest(userConfig, baseUrl, path)
 	if err != nil {
 		return models.GroupModel{}, err
 	}

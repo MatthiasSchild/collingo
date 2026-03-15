@@ -11,11 +11,22 @@ import (
 
 const (
 	UserConfigFileName = ".collingo"
+	DefaultServerUrl   = "https://collingo.app"
 )
 
 var (
 	ErrUserConfigNotAuthenticated = errors.New("login is required")
 )
+
+func EffectiveServerUrl(user *UserConfig, workspace *WorkspaceConfig) string {
+	if workspace != nil && workspace.ServerUrl != "" {
+		return workspace.ServerUrl
+	}
+	if user != nil && user.ServerUrl != "" {
+		return user.ServerUrl
+	}
+	return DefaultServerUrl
+}
 
 type UserConfig struct {
 	ApiToken  string `json:"apiToken,omitempty"`

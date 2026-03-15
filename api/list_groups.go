@@ -8,11 +8,11 @@ import (
 	"net/http"
 )
 
-func ListGroupSummary(userConfig *config.UserConfig, project string) (models.ManyResultModel[models.GroupSummaryModel], error) {
+func ListGroupSummary(userConfig *config.UserConfig, baseUrl string, project string) (models.ManyResultModel[models.GroupSummaryModel], error) {
 	var result models.ManyResultModel[models.GroupSummaryModel]
 
-	url := fmt.Sprintf("api/v1/projects/%s/group-summary", project)
-	req, err := prepareGetRequest(userConfig, url)
+	path := fmt.Sprintf("/api/v1/projects/%s/group-summary", project)
+	req, err := prepareGetRequest(userConfig, baseUrl, path)
 	if err != nil {
 		return result, err
 	}

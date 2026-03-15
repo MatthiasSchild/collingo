@@ -15,9 +15,9 @@ type UpdateGroupInput struct {
 	TechnicalName *string               `json:"technicalName,omitempty"`
 }
 
-func UpdateGroup(userConfig *config.UserConfig, projectId string, groupId string, input UpdateGroupInput) (models.GroupModel, error) {
-	url := fmt.Sprintf("/api/v1/projects/%s/groups/%s/", projectId, groupId)
-	req, err := preparePatchRequest(userConfig, url, input)
+func UpdateGroup(userConfig *config.UserConfig, baseUrl string, projectId string, groupId string, input UpdateGroupInput) (models.GroupModel, error) {
+	path := fmt.Sprintf("/api/v1/projects/%s/groups/%s/", projectId, groupId)
+	req, err := preparePatchRequest(userConfig, baseUrl, path, input)
 	if err != nil {
 		return models.GroupModel{}, err
 	}

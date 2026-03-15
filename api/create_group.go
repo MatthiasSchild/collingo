@@ -14,9 +14,9 @@ type CreateGroupInput struct {
 	Parent        string `json:"parent,omitempty"`
 }
 
-func CreateGroup(userConfig *config.UserConfig, project string, input CreateGroupInput) (models.GroupModel, error) {
-	url := fmt.Sprintf("/api/v1/projects/%s/groups", project)
-	req, err := preparePostRequest(userConfig, url, input)
+func CreateGroup(userConfig *config.UserConfig, baseUrl string, project string, input CreateGroupInput) (models.GroupModel, error) {
+	path := fmt.Sprintf("/api/v1/projects/%s/groups", project)
+	req, err := preparePostRequest(userConfig, baseUrl, path, input)
 	if err != nil {
 		return models.GroupModel{}, err
 	}

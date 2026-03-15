@@ -34,13 +34,14 @@ var EntriesDeleteCmd = &cobra.Command{
 			return err
 		}
 		projectId := workspaceConfig.ProjectId
+		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
 
 		// Get the ID of the group
 		groupId, err := cmd.Flags().GetString("group")
 		if err != nil {
 			return err
 		} else if groupId == "" {
-			group, err := dialogs.GroupSelection(userConfig, projectId)
+			group, err := dialogs.GroupSelection(userConfig, baseUrl, projectId)
 			if err != nil {
 				return err
 			}
@@ -61,7 +62,7 @@ var EntriesDeleteCmd = &cobra.Command{
 		// Get and display the entry, ask to confirm
 		noConfirm, _ := cmd.Flags().GetBool("yes")
 		if !noConfirm {
-			group, err := api.GetGroup(userConfig, projectId, groupId)
+			group, err := api.GetGroup(userConfig, baseUrl, projectId, groupId)
 			if err != nil {
 				return err
 			}
@@ -96,7 +97,7 @@ var EntriesDeleteCmd = &cobra.Command{
 		}
 
 		// Delete the entry
-		err = api.DeleteEntry(userConfig, projectId, groupId, technicalName)
+		err = api.DeleteEntry(userConfig, baseUrl, projectId, groupId, technicalName)
 		if err != nil {
 			return err
 		}

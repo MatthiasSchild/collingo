@@ -12,75 +12,43 @@ import (
 	"net/url"
 )
 
-const (
-	serverUrl = "https://collingo.app"
-)
-
 var Token string
 
-func buildRequestUrl(config *config.UserConfig, path string) (string, error) {
-	var err error
-	var requestUrl *url.URL
-
-	if config.ServerUrl != "" {
-		requestUrl, err = url.Parse(config.ServerUrl)
-		if err != nil {
-			return "", err
-		}
-	} else {
-		requestUrl, _ = url.Parse(serverUrl)
+func buildRequestUrl(baseUrl string, path string) (string, error) {
+	if baseUrl == "" {
+		baseUrl = config.DefaultServerUrl
 	}
-
+	requestUrl, err := url.Parse(baseUrl)
+	if err != nil {
+		return "", err
+	}
 	requestUrl.Path = path
 	return requestUrl.String(), nil
 }
 
-func buildRequestUrlWithPagination(config *config.UserConfig, path string, limit uint32, offset uint32) (string, error) {
-	var err error
-	var requestUrl *url.URL
-
-	if config.ServerUrl != "" {
-		requestUrl, err = url.Parse(config.ServerUrl)
-		if err != nil {
-			return "", err
-		}
-	} else {
-		requestUrl, _ = url.Parse(serverUrl)
+func buildRequestUrlWithPagination(baseUrl string, path string, limit uint32, offset uint32) (string, error) {
+	if baseUrl == "" {
+		baseUrl = config.DefaultServerUrl
 	}
-
+	requestUrl, err := url.Parse(baseUrl)
+	if err != nil {
+		return "", err
+	}
 	query := requestUrl.Query()
 	query.Set("limit", fmt.Sprintf("%d", limit))
 	query.Set("offset", fmt.Sprintf("%d", offset))
-
 	requestUrl.Path = path
 	requestUrl.RawQuery = query.Encode()
 	return requestUrl.String(), nil
 }
 
-func prepareGetRequest(config *config.UserConfig, path string) (*http.Request, error) {
-	url, err := buildRequestUrl(config, path)
+func prepareGetRequest(config *config.UserConfig, baseUrl string, path string) (*http.Request, error) {
+	urlStr, err := buildRequestUrl(baseUrl, path)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-	req.SetBasicAuth("token", config.ApiToken)
-
-	return req, nil
-}
-
-func prepareGetRequestWithPagination(config *config.UserConfig, path string, limit uint32, offset uint32) (*http.Request, error) {
-	url, err := buildRequestUrlWithPagination(config, path, limit, offset)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	req, err := http.NewRequest(http.MethodGet, urlStr, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -91,8 +59,25 @@ func prepareGetRequestWithPagination(config *config.UserConfig, path string, lim
 	return req, nil
 }
 
-func preparePostRequest(config *config.UserConfig, path string, body any) (*http.Request, error) {
-	url, err := buildRequestUrl(config, path)
+func prepareGetRequestWithPagination(config *config.UserConfig, baseUrl string, path string, limit uint32, offset uint32) (*http.Request, error) {
+	urlStr, err := buildRequestUrlWithPagination(baseUrl, path, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, urlStr, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.SetBasicAuth("token", config.ApiToken)
+
+	return req, nil
+}
+
+func preparePostRequest(config *config.UserConfig, baseUrl string, path string, body any) (*http.Request, error) {
+	urlStr, err := buildRequestUrl(baseUrl, path)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +87,7 @@ func preparePostRequest(config *config.UserConfig, path string, body any) (*http
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(jsonBytes))
+	req, err := http.NewRequest(http.MethodPost, urlStr, bytes.NewBuffer(jsonBytes))
 	if err != nil {
 		return nil, err
 	}
@@ -113,8 +98,8 @@ func preparePostRequest(config *config.UserConfig, path string, body any) (*http
 	return req, nil
 }
 
-func preparePatchRequest(config *config.UserConfig, path string, body any) (*http.Request, error) {
-	url, err := buildRequestUrl(config, path)
+func preparePatchRequest(config *config.UserConfig, baseUrl string, path string, body any) (*http.Request, error) {
+	urlStr, err := buildRequestUrl(baseUrl, path)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +109,7 @@ func preparePatchRequest(config *config.UserConfig, path string, body any) (*htt
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodPatch, url, bytes.NewBuffer(jsonBytes))
+	req, err := http.NewRequest(http.MethodPatch, urlStr, bytes.NewBuffer(jsonBytes))
 	if err != nil {
 		return nil, err
 	}
@@ -135,13 +120,13 @@ func preparePatchRequest(config *config.UserConfig, path string, body any) (*htt
 	return req, nil
 }
 
-func prepareDeleteRequest(config *config.UserConfig, path string) (*http.Request, error) {
-	url, err := buildRequestUrl(config, path)
+func prepareDeleteRequest(config *config.UserConfig, baseUrl string, path string) (*http.Request, error) {
+	urlStr, err := buildRequestUrl(baseUrl, path)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodDelete, url, nil)
+	req, err := http.NewRequest(http.MethodDelete, urlStr, nil)
 	if err != nil {
 		return nil, err
 	}

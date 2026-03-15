@@ -13,8 +13,8 @@ type CreateProjectInput struct {
 	TranslationLanguages []string `json:"translationLanguages"`
 }
 
-func CreateProject(userConfig *config.UserConfig, input CreateProjectInput) (models.ProjectModel, error) {
-	req, err := preparePostRequest(userConfig, "/api/v1/projects", input)
+func CreateProject(userConfig *config.UserConfig, baseUrl string, input CreateProjectInput) (models.ProjectModel, error) {
+	req, err := preparePostRequest(userConfig, baseUrl, "/api/v1/projects", input)
 	if err != nil {
 		return models.ProjectModel{}, err
 	}

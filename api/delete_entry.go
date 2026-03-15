@@ -6,9 +6,9 @@ import (
 	"net/http"
 )
 
-func DeleteEntry(userConfig *config.UserConfig, project string, group string, technicalName string) error {
-	url := fmt.Sprintf("/api/v1/projects/%s/groups/%s/entries/%s", project, group, technicalName)
-	req, err := prepareDeleteRequest(userConfig, url)
+func DeleteEntry(userConfig *config.UserConfig, baseUrl string, project string, group string, technicalName string) error {
+	path := fmt.Sprintf("/api/v1/projects/%s/groups/%s/entries/%s", project, group, technicalName)
+	req, err := prepareDeleteRequest(userConfig, baseUrl, path)
 	if err != nil {
 		return err
 	}

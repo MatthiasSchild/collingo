@@ -8,8 +8,8 @@ import (
 	"strings"
 )
 
-func ResolveGroupPath(userConfig *config.UserConfig, project string, path string) (models.GroupModel, error) {
-	groupSummaries, err := api.ListGroupSummary(userConfig, project)
+func ResolveGroupPath(userConfig *config.UserConfig, baseUrl string, project string, path string) (models.GroupModel, error) {
+	groupSummaries, err := api.ListGroupSummary(userConfig, baseUrl, project)
 	if err != nil {
 		return models.GroupModel{}, err
 	}
@@ -32,7 +32,7 @@ func ResolveGroupPath(userConfig *config.UserConfig, project string, path string
 
 		currentPath := strings.Join(parts, ".")
 		if currentPath == path {
-			group, err := api.GetGroup(userConfig, project, groupSummary.ID)
+			group, err := api.GetGroup(userConfig, baseUrl, project, groupSummary.ID)
 			if err != nil {
 				return models.GroupModel{}, err
 			}

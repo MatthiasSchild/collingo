@@ -31,11 +31,13 @@ var GroupsDeleteCmd = &cobra.Command{
 			return err
 		}
 		projectId := workspaceConfig.ProjectId
+		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
 
 		// Get the ID of the group
 		group, err := partials.GetGroupFromCommand(
 			userConfig,
 			workspaceConfig,
+			baseUrl,
 			cmd,
 		)
 		if err != nil {
@@ -62,7 +64,7 @@ var GroupsDeleteCmd = &cobra.Command{
 		}
 
 		// Delete the group
-		err = api.DeleteGroup(userConfig, projectId, group.ID)
+		err = api.DeleteGroup(userConfig, baseUrl, projectId, group.ID)
 		if err != nil {
 			return err
 		}

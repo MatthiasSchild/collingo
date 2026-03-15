@@ -4,6 +4,7 @@ import (
 	"collingo/api"
 	"collingo/config"
 	"collingo/console"
+	"collingo/partials"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -19,26 +20,30 @@ var LoginCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// Load user config
 		homeDir, _ := os.UserHomeDir()
-		config, err := config.LoadUserConfigFromFile(homeDir)
+		userConfig, err := config.LoadUserConfigFromFile(homeDir)
 		if err != nil {
 			return err
 		}
 
 		// Ask for the new api token
-		config.ApiToken = console.StringRegex(
+		userConfig.ApiToken = console.StringRegex(
 			"Please enter your API token",
 			`^[a-z0-9_]{1,32}$`,
 		)
 
+		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workspaceConfig, _ := config.LoadWorkspaceConfigFromFile(workingDir)
+		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
+
 		// Validate api token
-		info, err := api.Info(config)
+		info, err := api.Info(userConfig, baseUrl)
 		if err != nil {
 			return err
 		}
 		console.Info("API token check was successful")
 
 		// Update user config
-		err = config.WriteToFile(homeDir)
+		err = userConfig.WriteToFile(homeDir)
 		if err != nil {
 			return err
 		}

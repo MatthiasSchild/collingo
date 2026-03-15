@@ -12,9 +12,9 @@ type UpdateProjectInput struct {
 	Name *string `json:"name,omitempty"`
 }
 
-func UpdateProject(userConfig *config.UserConfig, projectId string, input UpdateProjectInput) (models.ProjectModel, error) {
-	url := fmt.Sprintf("/api/v1/projects/%s/", projectId)
-	req, err := preparePatchRequest(userConfig, url, input)
+func UpdateProject(userConfig *config.UserConfig, baseUrl string, projectId string, input UpdateProjectInput) (models.ProjectModel, error) {
+	path := fmt.Sprintf("/api/v1/projects/%s/", projectId)
+	req, err := preparePatchRequest(userConfig, baseUrl, path, input)
 	if err != nil {
 		return models.ProjectModel{}, err
 	}

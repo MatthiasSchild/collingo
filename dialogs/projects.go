@@ -8,13 +8,13 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func ProjectSelection(userConfig *config.UserConfig) (models.ProjectModel, error) {
+func ProjectSelection(userConfig *config.UserConfig, baseUrl string) (models.ProjectModel, error) {
 	projects := make([]models.ProjectModel, 0)
 	more := true
 	currentPage := uint32(0)
 
 	for more {
-		page, err := api.ListProjects(userConfig, 10, currentPage*10)
+		page, err := api.ListProjects(userConfig, baseUrl, 10, currentPage*10)
 		if err != nil {
 			return models.ProjectModel{}, err
 		}

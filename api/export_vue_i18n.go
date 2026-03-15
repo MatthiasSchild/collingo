@@ -7,8 +7,8 @@ import (
 	"net/http"
 )
 
-func ExportJson(userConfig *config.UserConfig, baseUrl string, project string) (string, error) {
-	path := fmt.Sprintf("/api/v1/projects/%s/export/json", project)
+func ExportVueI18n(userConfig *config.UserConfig, baseUrl string, project string) (string, error) {
+	path := fmt.Sprintf("/api/v1/projects/%s/export/vue-i18n", project)
 	req, err := prepareGetRequest(userConfig, baseUrl, path)
 	if err != nil {
 		return "", err

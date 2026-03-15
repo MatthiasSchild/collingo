@@ -11,13 +11,13 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func GroupSelection(userConfig *config.UserConfig, project string, exceptIds ...string) (models.GroupSummaryModel, error) {
+func GroupSelection(userConfig *config.UserConfig, baseUrl string, project string, exceptIds ...string) (models.GroupSummaryModel, error) {
 	groups := make([]models.GroupSummaryModel, 0)
 	more := true
 	currentPage := uint32(0)
 
 	for more {
-		page, err := api.ListGroupSummary(userConfig, project)
+		page, err := api.ListGroupSummary(userConfig, baseUrl, project)
 		if err != nil {
 			return models.GroupSummaryModel{}, err
 		}

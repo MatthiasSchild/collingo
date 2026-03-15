@@ -14,6 +14,7 @@ import (
 func GetGroupFromCommand(
 	userConfig *config.UserConfig,
 	workspaceConfig *config.WorkspaceConfig,
+	baseUrl string,
 	cmd *cobra.Command,
 ) (group models.GroupModel, err error) {
 	var groupId string
@@ -42,30 +43,31 @@ func GetGroupFromCommand(
 		}
 
 		// Group ID set, get the group by group id
-		group, err = api.GetGroup(userConfig, workspaceConfig.ProjectId, groupId)
+		group, err = api.GetGroup(userConfig, baseUrl, workspaceConfig.ProjectId, groupId)
 		return
 	}
 
 	// group-id is not set, try to get the group by path
 	if groupPath != "" {
 		// Try to resolve the group path and return the result
-		group, err = ResolveGroupPath(userConfig, workspaceConfig.ProjectId, groupPath)
+		group, err = ResolveGroupPath(userConfig, baseUrl, workspaceConfig.ProjectId, groupPath)
 		return
 	}
 
 	// Neither group-id nor group is set, open the selection dialog
 	var groupSummary models.GroupSummaryModel
-	groupSummary, err = dialogs.GroupSelection(userConfig, workspaceConfig.ProjectId)
+	groupSummary, err = dialogs.GroupSelection(userConfig, baseUrl, workspaceConfig.ProjectId)
 	if err != nil {
 		return
 	}
-	group, err = api.GetGroup(userConfig, workspaceConfig.ProjectId, groupSummary.ID)
+	group, err = api.GetGroup(userConfig, baseUrl, workspaceConfig.ProjectId, groupSummary.ID)
 	return
 }
 
 func GetParentFromCommand(
 	userConfig *config.UserConfig,
 	workspaceConfig *config.WorkspaceConfig,
+	baseUrl string,
 	cmd *cobra.Command,
 ) (group models.GroupModel, err error) {
 	var groupId string
@@ -94,14 +96,14 @@ func GetParentFromCommand(
 		}
 
 		// Group ID set, get the group by group id
-		group, err = api.GetGroup(userConfig, workspaceConfig.ProjectId, groupId)
+		group, err = api.GetGroup(userConfig, baseUrl, workspaceConfig.ProjectId, groupId)
 		return
 	}
 
 	// group-id is not set, try to get the group by path
 	if groupPath != "" {
 		// Try to resolve the group path and return the result
-		group, err = ResolveGroupPath(userConfig, workspaceConfig.ProjectId, groupPath)
+		group, err = ResolveGroupPath(userConfig, baseUrl, workspaceConfig.ProjectId, groupPath)
 		return
 	}
 
@@ -112,11 +114,11 @@ func GetParentFromCommand(
 	}
 	if selectParent {
 		var groupSummary models.GroupSummaryModel
-		groupSummary, err = dialogs.GroupSelection(userConfig, workspaceConfig.ProjectId)
+		groupSummary, err = dialogs.GroupSelection(userConfig, baseUrl, workspaceConfig.ProjectId)
 		if err != nil {
 			return
 		}
-		group, err = api.GetGroup(userConfig, workspaceConfig.ProjectId, groupSummary.ID)
+		group, err = api.GetGroup(userConfig, baseUrl, workspaceConfig.ProjectId, groupSummary.ID)
 	}
 	return
 }

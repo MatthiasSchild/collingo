@@ -6,6 +6,7 @@ import (
 	"collingo/console"
 	"collingo/dialogs"
 	"collingo/models"
+	"collingo/partials"
 	"collingo/utils"
 	"errors"
 	"os"
@@ -26,13 +27,17 @@ var ProjectsUpdateCmd = &cobra.Command{
 			return err
 		}
 
+		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workspaceConfig, _ := config.LoadWorkspaceConfigFromFile(workingDir)
+		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
+
 		// Get the project
 		var project *models.ProjectModel
 		projectId, err := cmd.Flags().GetString("project")
 		if err != nil {
 			return err
 		} else if projectId == "" {
-			project2, err := dialogs.ProjectSelection(userConfig)
+			project2, err := dialogs.ProjectSelection(userConfig, baseUrl)
 			if err != nil {
 				return err
 			}
@@ -43,7 +48,7 @@ var ProjectsUpdateCmd = &cobra.Command{
 			return errors.New("The id is not a valid id")
 		}
 		if project == nil {
-			project2, err := api.GetProject(userConfig, projectId)
+			project2, err := api.GetProject(userConfig, baseUrl, projectId)
 			if err != nil {
 				return err
 			}
@@ -81,7 +86,7 @@ var ProjectsUpdateCmd = &cobra.Command{
 			console.Info("Nothing to update")
 			return nil
 		}
-		projectResult, err := api.UpdateProject(userConfig, projectId, input)
+		projectResult, err := api.UpdateProject(userConfig, baseUrl, projectId, input)
 		if err != nil {
 			return err
 		}

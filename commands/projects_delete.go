@@ -5,6 +5,7 @@ import (
 	"collingo/config"
 	"collingo/console"
 	"collingo/dialogs"
+	"collingo/partials"
 	"collingo/utils"
 	"errors"
 	"os"
@@ -25,12 +26,16 @@ var ProjectsDeleteCmd = &cobra.Command{
 			return err
 		}
 
+		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workspaceConfig, _ := config.LoadWorkspaceConfigFromFile(workingDir)
+		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
+
 		// Get the ID of the project
 		projectId, err := cmd.Flags().GetString("id")
 		if err != nil {
 			return err
 		} else if projectId == "" {
-			project, err := dialogs.ProjectSelection(userConfig)
+			project, err := dialogs.ProjectSelection(userConfig, baseUrl)
 			if err != nil {
 				return err
 			}
@@ -43,7 +48,7 @@ var ProjectsDeleteCmd = &cobra.Command{
 		// Get and display the project, ask to confirm
 		noConfirm, _ := cmd.Flags().GetBool("yes")
 		if !noConfirm {
-			project, err := api.GetProject(userConfig, projectId)
+			project, err := api.GetProject(userConfig, baseUrl, projectId)
 			if err != nil {
 				return err
 			}
@@ -63,7 +68,7 @@ var ProjectsDeleteCmd = &cobra.Command{
 		}
 
 		// Delete the project
-		err = api.DeleteProject(userConfig, projectId)
+		err = api.DeleteProject(userConfig, baseUrl, projectId)
 		if err != nil {
 			return err
 		}

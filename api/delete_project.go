@@ -6,9 +6,9 @@ import (
 	"net/http"
 )
 
-func DeleteProject(userConfig *config.UserConfig, id string) error {
-	url := fmt.Sprintf("/api/v1/projects/%s", id)
-	req, err := prepareDeleteRequest(userConfig, url)
+func DeleteProject(userConfig *config.UserConfig, baseUrl string, id string) error {
+	path := fmt.Sprintf("/api/v1/projects/%s", id)
+	req, err := prepareDeleteRequest(userConfig, baseUrl, path)
 	if err != nil {
 		return err
 	}

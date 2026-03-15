@@ -29,7 +29,8 @@ var ExportJsonCommand = &cobra.Command{
 			return err
 		}
 
-		jsonContent, err := api.ExportJson(userConfig, workspaceConfig.ProjectId)
+		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
+		jsonContent, err := api.ExportJson(userConfig, baseUrl, workspaceConfig.ProjectId)
 		if err != nil {
 			return err
 		}

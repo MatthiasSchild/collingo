@@ -3,18 +3,16 @@ package commands
 import (
 	"collingo/api"
 	"collingo/config"
-	"collingo/console"
 	"collingo/partials"
+	"fmt"
 	"os"
-	"strings"
 
 	"github.com/spf13/cobra"
 )
 
-var GroupsListCmd = &cobra.Command{
-	Use:           "list",
-	Aliases:       []string{"ls"},
-	Short:         "List the groups of a project",
+var ExportVueI18nCommand = &cobra.Command{
+	Use:           "vue-i18n",
+	Short:         "Export data in vue-i18n format (for src/i18n.json)",
 	SilenceErrors: true,
 	SilenceUsage:  true,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -24,7 +22,6 @@ var GroupsListCmd = &cobra.Command{
 			return err
 		}
 
-		// Get current project
 		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
 		workspaceConfig, err := config.LoadWorkspaceConfigFromFile(workingDir)
 		if err != nil {
@@ -32,28 +29,17 @@ var GroupsListCmd = &cobra.Command{
 		}
 
 		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
-
-		// List groups
-		summary, err := api.ListGroupSummary(userConfig, baseUrl, workspaceConfig.ProjectId)
+		content, err := api.ExportVueI18n(userConfig, baseUrl, workspaceConfig.ProjectId)
 		if err != nil {
 			return err
 		}
 
-		for _, entry := range summary.Result {
-			name := strings.Join(append(entry.BreadcrumbNames, entry.DisplayName), " > ")
-			console.InfoF(
-				"[%s] %s (%s)",
-				entry.ID,
-				name,
-				entry.TechnicalName,
-			)
-		}
-
+		fmt.Print(content)
 		return nil
 	},
 }
 
 func init() {
-	GroupsCmd.AddCommand(GroupsListCmd)
-	GroupsListCmd.Flags().String("working-dir", "", "Set the working directory")
+	ExportCommand.AddCommand(ExportVueI18nCommand)
+	ExportVueI18nCommand.Flags().String("working-dir", "", "Set the working directory")
 }

@@ -8,9 +8,9 @@ import (
 	"net/http"
 )
 
-func GetProject(userConfig *config.UserConfig, id string) (models.ProjectModel, error) {
-	url := fmt.Sprintf("/api/v1/projects/%s", id)
-	req, err := prepareGetRequest(userConfig, url)
+func GetProject(userConfig *config.UserConfig, baseUrl string, id string) (models.ProjectModel, error) {
+	path := fmt.Sprintf("/api/v1/projects/%s", id)
+	req, err := prepareGetRequest(userConfig, baseUrl, path)
 	if err != nil {
 		return models.ProjectModel{}, err
 	}

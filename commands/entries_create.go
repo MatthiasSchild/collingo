@@ -30,10 +30,13 @@ var EntriesCreateCmd = &cobra.Command{
 			return err
 		}
 
+		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
+
 		// Get the group
 		group, err := partials.GetGroupFromCommand(
 			userConfig,
 			workspaceConfig,
+			baseUrl,
 			cmd,
 		)
 		if err != nil {
@@ -64,7 +67,7 @@ var EntriesCreateCmd = &cobra.Command{
 			contextInfo = console.String("Enter optionally a context info")
 		}
 
-		group, err = api.CreateEntry(userConfig, workspaceConfig.ProjectId, group.ID, api.CreateEntryInput{
+		group, err = api.CreateEntry(userConfig, baseUrl, workspaceConfig.ProjectId, group.ID, api.CreateEntryInput{
 			TechnicalName: technicalName,
 			BaseTerm:      baseTerm,
 			ContextInfo:   contextInfo,

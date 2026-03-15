@@ -14,9 +14,9 @@ type CreateEntryInput struct {
 	ContextInfo   string `json:"contextInfo,omitempty"`
 }
 
-func CreateEntry(userConfig *config.UserConfig, project string, group string, input CreateEntryInput) (models.GroupModel, error) {
-	url := fmt.Sprintf("/api/v1/projects/%s/groups/%s/entries", project, group)
-	req, err := preparePostRequest(userConfig, url, input)
+func CreateEntry(userConfig *config.UserConfig, baseUrl string, project string, group string, input CreateEntryInput) (models.GroupModel, error) {
+	path := fmt.Sprintf("/api/v1/projects/%s/groups/%s/entries", project, group)
+	req, err := preparePostRequest(userConfig, baseUrl, path, input)
 	if err != nil {
 		return models.GroupModel{}, err
 	}

@@ -35,10 +35,13 @@ var EntriesUpdateCmd = &cobra.Command{
 			return err
 		}
 
+		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
+
 		// Get the group
 		group, err := partials.GetGroupFromCommand(
 			userConfig,
 			workspaceConfig,
+			baseUrl,
 			cmd,
 		)
 		if err != nil {
@@ -82,14 +85,14 @@ var EntriesUpdateCmd = &cobra.Command{
 			return errors.New("new-group and new-group-id can't be used at the same time")
 		}
 		if updateGroup != "" {
-			newGroupResolved, err := partials.ResolveGroupPath(userConfig, workspaceConfig.ProjectId, updateGroup)
+			newGroupResolved, err := partials.ResolveGroupPath(userConfig, baseUrl, workspaceConfig.ProjectId, updateGroup)
 			if err != nil {
 				return err
 			}
 			newGroup = &newGroupResolved
 		}
 		if updateGroupId != "" {
-			newGroupResolved, err := api.GetGroup(userConfig, workspaceConfig.ProjectId, updateGroupId)
+			newGroupResolved, err := api.GetGroup(userConfig, baseUrl, workspaceConfig.ProjectId, updateGroupId)
 			if err != nil {
 				return err
 			}
@@ -101,11 +104,11 @@ var EntriesUpdateCmd = &cobra.Command{
 				return err
 			}
 			if shouldMove {
-				groupSummary, err := dialogs.GroupSelection(userConfig, workspaceConfig.ProjectId, group.ID)
+				groupSummary, err := dialogs.GroupSelection(userConfig, baseUrl, workspaceConfig.ProjectId, group.ID)
 				if err != nil {
 					return err
 				}
-				newGroupSelection, err := api.GetGroup(userConfig, workspaceConfig.ProjectId, groupSummary.ID)
+				newGroupSelection, err := api.GetGroup(userConfig, baseUrl, workspaceConfig.ProjectId, groupSummary.ID)
 				if err != nil {
 					return err
 				}
@@ -228,14 +231,14 @@ var EntriesUpdateCmd = &cobra.Command{
 				BaseTerm:      entry.BaseTerm,
 				ContextInfo:   entry.ContextInfo,
 			}
-			_, err = api.CreateEntry(userConfig, workspaceConfig.ProjectId, targetGroup.ID, createEntryInput)
+			_, err = api.CreateEntry(userConfig, baseUrl, workspaceConfig.ProjectId, targetGroup.ID, createEntryInput)
 			if err != nil {
 				return err
 			}
 			console.Success("Creating the new entry was successful, deleting the old one...")
 
 			// Remove the entry from the old group
-			err = api.DeleteEntry(userConfig, workspaceConfig.ProjectId, group.ID, originalEntry.TechnicalName)
+			err = api.DeleteEntry(userConfig, baseUrl, workspaceConfig.ProjectId, group.ID, originalEntry.TechnicalName)
 			if err != nil {
 				return err
 			}
@@ -252,6 +255,7 @@ var EntriesUpdateCmd = &cobra.Command{
 
 			resp, err := api.UpdateEntry(
 				userConfig,
+				baseUrl,
 				workspaceConfig.ProjectId,
 				group.ID,
 				technicalName,

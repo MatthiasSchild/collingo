@@ -8,10 +8,10 @@ import (
 	"net/http"
 )
 
-func Info(config *config.UserConfig) (models.InfoModel, error) {
+func Info(config *config.UserConfig, baseUrl string) (models.InfoModel, error) {
 	var result models.InfoModel
 
-	path, err := buildRequestUrl(config, "/api/v1/info")
+	path, err := buildRequestUrl(baseUrl, "/api/v1/info")
 	if err != nil {
 		return result, err
 	}

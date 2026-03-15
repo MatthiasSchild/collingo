@@ -15,18 +15,19 @@ type UpdateEntryInput struct {
 
 func UpdateEntry(
 	userConfig *config.UserConfig,
+	baseUrl string,
 	projectId string,
 	groupId string,
 	technicalName string,
 	input UpdateEntryInput,
 ) (models.GroupModel, error) {
-	url := fmt.Sprintf(
+	path := fmt.Sprintf(
 		"/api/v1/projects/%s/groups/%s/entries/%s",
 		projectId,
 		groupId,
 		technicalName,
 	)
-	req, err := preparePatchRequest(userConfig, url, input)
+	req, err := preparePatchRequest(userConfig, baseUrl, path, input)
 	if err != nil {
 		return models.GroupModel{}, nil
 	}

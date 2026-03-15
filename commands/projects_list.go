@@ -4,6 +4,7 @@ import (
 	"collingo/api"
 	"collingo/config"
 	"collingo/console"
+	"collingo/partials"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -22,8 +23,12 @@ var ProjectsListCmd = &cobra.Command{
 			return err
 		}
 
+		workingDir := partials.WorkingDirFromFlags(cmd, "working-dir")
+		workspaceConfig, _ := config.LoadWorkspaceConfigFromFile(workingDir)
+		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
+
 		// Get current user
-		info, err := api.Info(userConfig)
+		info, err := api.Info(userConfig, baseUrl)
 		if err != nil {
 			return err
 		}
@@ -31,7 +36,7 @@ var ProjectsListCmd = &cobra.Command{
 		// Fetch pages of projects
 		page := uint32(0)
 		for {
-			result, err := api.ListProjects(userConfig, 10, page*10)
+			result, err := api.ListProjects(userConfig, baseUrl, 10, page*10)
 			if err != nil {
 				return err
 			}

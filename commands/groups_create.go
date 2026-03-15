@@ -30,6 +30,8 @@ var GroupsCreateCmd = &cobra.Command{
 			return err
 		}
 
+		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
+
 		// Get the display name
 		displayName, err := cmd.Flags().GetString("display-name")
 		if err != nil {
@@ -47,7 +49,7 @@ var GroupsCreateCmd = &cobra.Command{
 		}
 
 		// Select a parent group
-		parent, err := partials.GetParentFromCommand(userConfig, workspaceConfig, cmd)
+		parent, err := partials.GetParentFromCommand(userConfig, workspaceConfig, baseUrl, cmd)
 		if err != nil {
 			return err
 		}
@@ -57,7 +59,7 @@ var GroupsCreateCmd = &cobra.Command{
 		}
 
 		// Create the group
-		group, err := api.CreateGroup(userConfig, workspaceConfig.ProjectId, api.CreateGroupInput{
+		group, err := api.CreateGroup(userConfig, baseUrl, workspaceConfig.ProjectId, api.CreateGroupInput{
 			DisplayName:   displayName,
 			TechnicalName: technicalName,
 			Parent:        parentId,

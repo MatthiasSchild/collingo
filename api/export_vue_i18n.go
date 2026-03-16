@@ -7,9 +7,9 @@ import (
 	"net/http"
 )
 
-func ExportVueI18n(userConfig *config.UserConfig, baseUrl string, project string) (string, error) {
+func ExportVueI18n(userConfig *config.UserConfig, baseUrl string, project string, format bool) (string, error) {
 	path := fmt.Sprintf("/api/v1/projects/%s/export/vue-i18n", project)
-	req, err := prepareGetRequest(userConfig, baseUrl, path)
+	req, err := prepareGetRequestWithFormat(userConfig, baseUrl, path, format)
 	if err != nil {
 		return "", err
 	}

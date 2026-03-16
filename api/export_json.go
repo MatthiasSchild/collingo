@@ -7,9 +7,9 @@ import (
 	"net/http"
 )
 
-func ExportJson(userConfig *config.UserConfig, baseUrl string, project string) (string, error) {
+func ExportJson(userConfig *config.UserConfig, baseUrl string, project string, format bool) (string, error) {
 	path := fmt.Sprintf("/api/v1/projects/%s/export/json", project)
-	req, err := prepareGetRequest(userConfig, baseUrl, path)
+	req, err := prepareGetRequestWithFormat(userConfig, baseUrl, path, format)
 	if err != nil {
 		return "", err
 	}

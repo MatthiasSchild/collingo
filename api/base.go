@@ -59,6 +59,33 @@ func prepareGetRequest(config *config.UserConfig, baseUrl string, path string) (
 	return req, nil
 }
 
+func prepareGetRequestWithFormat(userConfig *config.UserConfig, baseUrl string, path string, format bool) (*http.Request, error) {
+	if baseUrl == "" {
+		baseUrl = config.DefaultServerUrl
+	}
+	requestUrl, err := url.Parse(baseUrl)
+	if err != nil {
+		return nil, err
+	}
+	requestUrl.Path = path
+	if format {
+		query := requestUrl.Query()
+		query.Set("format", "true")
+		requestUrl.RawQuery = query.Encode()
+	}
+	urlStr := requestUrl.String()
+
+	req, err := http.NewRequest(http.MethodGet, urlStr, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.SetBasicAuth("token", userConfig.ApiToken)
+
+	return req, nil
+}
+
 func prepareGetRequestWithPagination(config *config.UserConfig, baseUrl string, path string, limit uint32, offset uint32) (*http.Request, error) {
 	urlStr, err := buildRequestUrlWithPagination(baseUrl, path, limit, offset)
 	if err != nil {

@@ -29,8 +29,10 @@ var ExportJsonCommand = &cobra.Command{
 			return err
 		}
 
+		format, _ := cmd.Flags().GetBool("format")
+
 		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
-		jsonContent, err := api.ExportJson(userConfig, baseUrl, workspaceConfig.ProjectId)
+		jsonContent, err := api.ExportJson(userConfig, baseUrl, workspaceConfig.ProjectId, format)
 		if err != nil {
 			return err
 		}
@@ -41,5 +43,6 @@ var ExportJsonCommand = &cobra.Command{
 }
 
 func init() {
+	ExportJsonCommand.Flags().Bool("format", false, "Format the output")
 	ExportCommand.AddCommand(ExportJsonCommand)
 }

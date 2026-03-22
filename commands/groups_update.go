@@ -83,25 +83,6 @@ var GroupsUpdateCmd = &cobra.Command{
 			}
 		}
 
-		// Update display name
-		updateDisplayName, err := cmd.Flags().GetString("display-name")
-		if err != nil {
-			return err
-		}
-		if updateDisplayName == "" {
-			shouldUpdateDisplayName, err := dialogs.ConfirmF(
-				"Do you want to update the display name (currently '%s')?",
-				group.DisplayName,
-			)
-			if err != nil {
-				return err
-			}
-
-			if shouldUpdateDisplayName {
-				updateDisplayName = console.StringRequired("Please enter a new display name")
-			}
-		}
-
 		// Update technical name
 		updateTechnicalName, err := cmd.Flags().GetString("technical-name")
 		if err != nil {
@@ -121,6 +102,25 @@ var GroupsUpdateCmd = &cobra.Command{
 			}
 		}
 
+		// Update display name
+		updateDisplayName, err := cmd.Flags().GetString("display-name")
+		if err != nil {
+			return err
+		}
+		if updateDisplayName == "" {
+			shouldUpdateDisplayName, err := dialogs.ConfirmF(
+				"Do you want to update the display name (currently '%s')?",
+				group.DisplayName,
+			)
+			if err != nil {
+				return err
+			}
+
+			if shouldUpdateDisplayName {
+				updateDisplayName = console.StringRequired("Please enter a new display name")
+			}
+		}
+
 		// Update the group
 		input := api.UpdateGroupInput{}
 		updateAnything := false
@@ -131,12 +131,12 @@ var GroupsUpdateCmd = &cobra.Command{
 			input.Parent = utils.NullableStringNull()
 			updateAnything = true
 		}
-		if updateDisplayName != "" {
-			input.DisplayName = &updateDisplayName
-			updateAnything = true
-		}
 		if updateTechnicalName != "" {
 			input.TechnicalName = &updateTechnicalName
+			updateAnything = true
+		}
+		if updateDisplayName != "" {
+			input.DisplayName = &updateDisplayName
 			updateAnything = true
 		}
 

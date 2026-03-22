@@ -32,20 +32,20 @@ var GroupsCreateCmd = &cobra.Command{
 
 		baseUrl := config.EffectiveServerUrl(userConfig, workspaceConfig)
 
-		// Get the display name
-		displayName, err := cmd.Flags().GetString("display-name")
-		if err != nil {
-			return err
-		} else if displayName == "" {
-			displayName = console.StringRequired("Please enter a readable name for the group")
-		}
-
 		// Get the technical name
 		technicalName, err := cmd.Flags().GetString("technical-name")
 		if err != nil {
 			return err
 		} else if technicalName == "" {
 			technicalName = console.TechnicalName("Please enter a technical name for the group")
+		}
+
+		// Get the display name
+		displayName, err := cmd.Flags().GetString("display-name")
+		if err != nil {
+			return err
+		} else if displayName == "" {
+			displayName = console.StringRequired("Please enter a readable name for the group")
 		}
 
 		// Select a parent group

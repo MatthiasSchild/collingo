@@ -19,9 +19,9 @@ var (
 )
 
 type WorkspaceConfig struct {
-	ProjectId string `json:"project,omitempty"`
-	Template  string `json:"template,omitempty"`
-	ServerUrl string `json:"serverUrl,omitempty"`
+	ProjectId string          `json:"project,omitempty"`
+	Template  *TemplateConfig `json:"template,omitempty"`
+	ServerUrl string          `json:"serverUrl,omitempty"`
 }
 
 func LoadWorkspaceConfigFromFile(currentDir string) (*WorkspaceConfig, error) {

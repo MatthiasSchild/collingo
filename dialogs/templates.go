@@ -11,7 +11,10 @@ type templateDefinition struct {
 
 var templateDefinitions = []templateDefinition{
 	{Key: "", Name: "No template"},
-	{Key: "vue-i18n", Name: "Vue i18n - $t('key')"},
+	{Key: "vue-i18n", Name: "Vue i18n"},
+	{Key: "flutter", Name: "Flutter"},
+	{Key: "json", Name: "JSON"},
+	{Key: "i18next", Name: "i18next"},
 }
 
 func TemplateSelection() (string, error) {

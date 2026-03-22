@@ -5,6 +5,7 @@ import (
 	"collingo/console"
 	"collingo/partials"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -35,8 +36,15 @@ var EnvCmd = &cobra.Command{
 			console.Info("Workspace: yes")
 			console.InfoF("  Config file: %s", workspaceConfigPath)
 			console.InfoF("  Project ID: %s", workspaceConfig.ProjectId)
-			if workspaceConfig.Template != "" {
-				console.InfoF("  Template: %s", workspaceConfig.Template)
+			if workspaceConfig.Template != nil && workspaceConfig.Template.HasKind() {
+				lines := strings.Split(workspaceConfig.Template.EnvDescription(), "\n")
+				for i, line := range lines {
+					if i == 0 {
+						console.InfoF("  Template: %s", line)
+					} else {
+						console.InfoF("  %s", line)
+					}
+				}
 			} else {
 				console.Info("  Template: (none)")
 			}

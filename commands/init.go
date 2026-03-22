@@ -60,15 +60,19 @@ func initCmdNew() error {
 		return err
 	}
 
-	// Select template
-	template, err := dialogs.TemplateSelection()
+	// Select template and optional default export settings
+	templateKey, err := dialogs.TemplateSelection()
+	if err != nil {
+		return err
+	}
+	tmpl, err := dialogs.PromptTemplateExportOptions(templateKey)
 	if err != nil {
 		return err
 	}
 
 	workspaceConfig := config.WorkspaceConfig{
 		ProjectId: project.ID,
-		Template:  template,
+		Template:  tmpl,
 	}
 	err = workspaceConfig.WriteToFile(currentDir)
 	if err != nil {
@@ -116,11 +120,15 @@ func initCmdUpdate() error {
 		return err
 	}
 	if updateTemplate {
-		template, err := dialogs.TemplateSelection()
+		templateKey, err := dialogs.TemplateSelection()
 		if err != nil {
 			return err
 		}
-		workspaceConfig.Template = template
+		tmpl, err := dialogs.PromptTemplateExportOptions(templateKey)
+		if err != nil {
+			return err
+		}
+		workspaceConfig.Template = tmpl
 	}
 
 	err = workspaceConfig.WriteToFile(currentDir)
